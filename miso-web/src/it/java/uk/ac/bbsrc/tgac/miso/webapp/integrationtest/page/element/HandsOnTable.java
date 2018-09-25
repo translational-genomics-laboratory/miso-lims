@@ -109,30 +109,34 @@ public class HandsOnTable extends AbstractElement {
 
   private void sendCleanKeys(WebElement receiver, String text) {
     for (char c : text.toCharArray()) {
-      switch (c) {
-      case '0':
-        receiver.sendKeys(Keys.NUMPAD0);
-      case '1':
-        receiver.sendKeys(Keys.NUMPAD1);
-      case '2':
-        receiver.sendKeys(Keys.NUMPAD2);
-      case '3':
-        receiver.sendKeys(Keys.NUMPAD3);
-      case '4':
-        receiver.sendKeys(Keys.NUMPAD4);
-      case '5':
-        receiver.sendKeys(Keys.NUMPAD5);
-      case '6':
-        receiver.sendKeys(Keys.NUMPAD6);
-      case '7':
-        receiver.sendKeys(Keys.NUMPAD7);
-      case '8':
-        receiver.sendKeys(Keys.NUMPAD8);
-      case '9':
-        receiver.sendKeys(Keys.NUMPAD9);
-      default:
-        receiver.sendKeys(String.valueOf(c));
-      }
+      receiver.sendKeys(getCleanKeys(c));
+    }
+  }
+
+  private static CharSequence getCleanKeys(char character) {
+    switch (character) {
+    case '0':
+      return Keys.NUMPAD0;
+    case '1':
+      return Keys.NUMPAD1;
+    case '2':
+      return Keys.NUMPAD2;
+    case '3':
+      return Keys.NUMPAD3;
+    case '4':
+      return Keys.NUMPAD4;
+    case '5':
+      return Keys.NUMPAD5;
+    case '6':
+      return Keys.NUMPAD6;
+    case '7':
+      return Keys.NUMPAD7;
+    case '8':
+      return Keys.NUMPAD8;
+    case '9':
+      return Keys.NUMPAD9;
+    default:
+      return String.valueOf(character);
     }
   }
 
