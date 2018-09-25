@@ -101,10 +101,39 @@ public class HandsOnTable extends AbstractElement {
     }
     cellEditor.clear();
     waitUntil(textToBe(activeCellEditorSelector, ""));
-    cellEditor.sendKeys(text);
+    sendCleanKeys(cellEditor, text);
     waitUntil(attributeToBe(activeCellEditorSelector, "value", text));
     cellEditor.sendKeys(Keys.ENTER);
     waitUntil(invisibilityOf(cellEditor));
+  }
+
+  private void sendCleanKeys(WebElement receiver, String text) {
+    for (char c : text.toCharArray()) {
+      switch (c) {
+      case '0':
+        receiver.sendKeys(Keys.NUMPAD0);
+      case '1':
+        receiver.sendKeys(Keys.NUMPAD1);
+      case '2':
+        receiver.sendKeys(Keys.NUMPAD2);
+      case '3':
+        receiver.sendKeys(Keys.NUMPAD3);
+      case '4':
+        receiver.sendKeys(Keys.NUMPAD4);
+      case '5':
+        receiver.sendKeys(Keys.NUMPAD5);
+      case '6':
+        receiver.sendKeys(Keys.NUMPAD6);
+      case '7':
+        receiver.sendKeys(Keys.NUMPAD7);
+      case '8':
+        receiver.sendKeys(Keys.NUMPAD8);
+      case '9':
+        receiver.sendKeys(Keys.NUMPAD9);
+      default:
+        receiver.sendKeys(String.valueOf(c));
+      }
+    }
   }
 
   public void clearField(String columnHeading, int rowNum) {
