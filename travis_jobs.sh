@@ -15,7 +15,7 @@ elif [ "$JOB" = "PLAIN_WEB_IT" ]; then
     mvn -P external clean verify -DskipUTs=true -DrunPlainITs
 elif [ "$JOB" = "BULK_WEB_IT" ]; then
     cd miso-web
-    mvn -P external clean verify -DskipUTs=true -DskipITs=false -Dit.test='Bulk*'
+    mvn -P external clean verify -DskipUTs=true -DskipITs=false -Dit.test='BulkLibraryIT'
 elif [ "$JOB" = "OTHER_WEB_IT" ]; then
     cd miso-web
     mvn -P external clean verify -DskipUTs=true -DskipITs=false -Dit.test='!PlainSampleITs, !Bulk*'
