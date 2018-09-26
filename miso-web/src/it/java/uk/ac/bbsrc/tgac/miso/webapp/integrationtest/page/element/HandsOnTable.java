@@ -102,7 +102,7 @@ public class HandsOnTable extends AbstractElement {
     cellEditor.clear();
     waitUntil(textToBe(activeCellEditorSelector, ""));
     sendCleanKeys(cellEditor, text);
-    // waitUntil(attributeToBe(activeCellEditorSelector, "value", text));
+    waitUntil(attributeToBe(activeCellEditorSelector, "value", text));
     cellEditor.sendKeys(Keys.ENTER);
     waitUntil(invisibilityOf(cellEditor));
   }
