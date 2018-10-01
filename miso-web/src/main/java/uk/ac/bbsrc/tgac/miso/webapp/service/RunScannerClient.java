@@ -29,9 +29,10 @@ import uk.ac.bbsrc.tgac.miso.core.security.SuperuserAuthentication;
 import uk.ac.bbsrc.tgac.miso.core.util.LatencyHistogram;
 import uk.ac.bbsrc.tgac.miso.dto.Dtos;
 import uk.ac.bbsrc.tgac.miso.dto.NotificationDto;
-import uk.ac.bbsrc.tgac.miso.dto.ProgressiveRequestDto;
-import uk.ac.bbsrc.tgac.miso.dto.ProgressiveResponseDto;
 import uk.ac.bbsrc.tgac.miso.service.RunService;
+
+import ca.on.gsi.oicr.runscanner.ProgressiveRequestDto;
+import ca.on.gsi.oicr.runscanner.ProgressiveResponseDto;
 
 @Service
 public class RunScannerClient {

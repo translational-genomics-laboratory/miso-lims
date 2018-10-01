@@ -177,6 +177,9 @@ import uk.ac.bbsrc.tgac.miso.core.service.printing.Driver;
 import uk.ac.bbsrc.tgac.miso.core.util.BoxUtils;
 import uk.ac.bbsrc.tgac.miso.core.util.LimsUtils;
 
+import ca.on.gsi.oicr.runscanner.IlluminaNotificationDto;
+import ca.on.gsi.oicr.runscanner.LS454NotificationDto;
+
 @SuppressWarnings("squid:S3776") // make Sonar ignore cognitive complexity warnings for this file
 public class Dtos {
 
@@ -2710,15 +2713,13 @@ public class Dtos {
       to.setDefaultVolume(from.getDefaultVolume());
     }
 
-    if (from.getProjectIds() != null) {
-      List<Project> projects = new ArrayList<>();
-      from.getProjectIds().stream().forEach(id -> {
-        Project project = new ProjectImpl();
-        project.setId(id);
-        projects.add(project);
-      });
-      to.setProjects(projects);
-    }
+    List<Project> projects = new ArrayList<>();
+    from.getProjectIds().stream().forEach(id -> {
+      Project project = new ProjectImpl();
+      project.setId(id);
+      projects.add(project);
+    });
+    to.setProjects(projects);
 
     if (from.getLibraryTypeId() != null) {
       LibraryType libraryType = new LibraryType();

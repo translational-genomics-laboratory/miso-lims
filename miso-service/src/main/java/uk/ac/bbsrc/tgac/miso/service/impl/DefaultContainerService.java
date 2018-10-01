@@ -2,14 +2,18 @@ package uk.ac.bbsrc.tgac.miso.service.impl;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.eaglegenomics.simlims.core.User;
+
 import uk.ac.bbsrc.tgac.miso.core.data.Partition;
 import uk.ac.bbsrc.tgac.miso.core.data.Pool;
+import uk.ac.bbsrc.tgac.miso.core.data.Sample;
 import uk.ac.bbsrc.tgac.miso.core.data.SequencerPartitionContainer;
 import uk.ac.bbsrc.tgac.miso.core.data.impl.OxfordNanoporeContainer;
 import uk.ac.bbsrc.tgac.miso.core.data.impl.PoreVersion;
@@ -97,7 +101,7 @@ public class DefaultContainerService
   public SequencerPartitionContainer create(SequencerPartitionContainer container) throws IOException {
     loadChildEntities(container);
     authorizationManager.throwIfNotWritable(container);
-    container.setChangeDetails(authorizationManager.getCurrentUser());
+    setChangeDetails(container);
 
     container.setSecurityProfile(securityProfileDao.get(securityProfileDao.save(container.getSecurityProfile())));
     return containerDao.save(container);
@@ -108,7 +112,7 @@ public class DefaultContainerService
     SequencerPartitionContainer managed = get(container.getId());
     authorizationManager.throwIfNotWritable(managed);
     applyChanges(container, managed);
-    managed.setChangeDetails(authorizationManager.getCurrentUser());
+    setChangeDetails(managed);
     loadChildEntities(managed);
     return containerDao.save(managed);
   }
@@ -193,6 +197,30 @@ public class DefaultContainerService
     }
   }
 
+  /**
+   * Updates all user data associated with the change
+   * 
+   * @param container the SequencerPartitionContainer to update
+   * @throws IOException
+   */
+  private void setChangeDetails(SequencerPartitionContainer container) throws IOException {
+    User user = authorizationManager.getCurrentUser();
+    Date now = new Date();
+    container.setLastModifier(user);
+
+    if (container.getId() == Sample.UNSAVED_ID) {
+      container.setCreator(user);
+      if (container.getCreationTime() == null) {
+        container.setCreationTime(now);
+        container.setLastModified(now);
+      } else if (container.getLastModified() == null) {
+        container.setLastModified(now);
+      }
+    } else {
+      container.setLastModified(now);
+    }
+  }
+
   @Override
   public Partition getPartition(long partitionId) throws IOException {
     Partition partition = containerDao.getPartitionById(partitionId);
@@ -222,7 +250,7 @@ public class DefaultContainerService
     authorizationManager.throwIfNotWritable(original.getSequencerPartitionContainer());
     Pool pool = partition.getPool() == null ? null : poolService.get(partition.getPool().getId());
     original.setPool(pool);
-    original.getSequencerPartitionContainer().setChangeDetails(authorizationManager.getCurrentUser());
+    setChangeDetails(original.getSequencerPartitionContainer());
     containerDao.save(original.getSequencerPartitionContainer());
   }
 

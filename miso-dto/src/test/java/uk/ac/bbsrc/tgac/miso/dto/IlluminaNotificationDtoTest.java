@@ -18,6 +18,8 @@ import uk.ac.bbsrc.tgac.miso.core.data.Run;
 import uk.ac.bbsrc.tgac.miso.core.data.type.HealthType;
 import uk.ac.bbsrc.tgac.miso.core.util.LimsUtils;
 
+import ca.on.gsi.oicr.runscanner.IlluminaNotificationDto;
+
 public class IlluminaNotificationDtoTest {
 
 

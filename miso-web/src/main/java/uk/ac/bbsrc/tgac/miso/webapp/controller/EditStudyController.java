@@ -32,15 +32,14 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -67,32 +66,23 @@ public class EditStudyController {
   protected static final Logger log = LoggerFactory.getLogger(EditStudyController.class);
 
   @Autowired
-  private AuthorizationManager authorizationManager;
-  @Autowired
   private SecurityManager securityManager;
+
+  @Autowired
+  private AuthorizationManager authorizationManager;
+
   @Autowired
   private ProjectService projectService;
+
   @Autowired
   private StudyService studyService;
 
-  /**
-   * Retrieves from miso.properties whether detailed sample mode has been enabled
-   */
-  @Value("${miso.detailed.sample.enabled}")
-  private Boolean detailedSample;
-
-  /**
-   * Gets status of detailed sample mode
-   * 
-   * @return whether detailed sample mode has been enabled by miso.properties
-   */
-  @ModelAttribute("detailedSample")
-  private Boolean isDetailedSampleEnabled() {
-    return detailedSample;
-  }
-
   public void setProjectService(ProjectService projectService) {
     this.projectService = projectService;
+  }
+
+  public void setSecurityManager(SecurityManager securityManager) {
+    this.securityManager = securityManager;
   }
 
   public Project populateProject(@PathVariable Long projectId) throws IOException {
@@ -115,35 +105,10 @@ public class EditStudyController {
   public Collection<StudyType> populateStudyTypes() throws IOException {
     return studyService.listTypes();
   }
-  
-  /**
-   * Populates 'projects' model attribute with list of projects sorted by name if in plain sample mode, by shortname if in detailed
-   * sample mode.
-   * 
-   * @return Collection of Project sorted by name if in plain sample mode, by shortname if in detailed sample mode
-   * @throws IOException upon failure to access Projects
-   */
-  @ModelAttribute("projects")
-  public Collection<Project> populateProjects() throws IOException {
-    if (detailedSample) {
-      return projectService.listAllProjectsByShortname();
-    } else {
-      return projectService.listAllProjects();
-    }
-  }
 
-  @GetMapping(value = "/new")
-  public ModelAndView newStudy(ModelMap model) throws IOException {
-    User user = authorizationManager.getCurrentUser();
-    Study study = new StudyImpl(user);
-
-    authorizationManager.throwIfNotWritable(study);
-    return setupForm(study, user, "New Study", model);
-  }
-
-  @GetMapping(value = "/new/{projectId}")
+  @RequestMapping(value = "/new/{projectId}", method = RequestMethod.GET)
   public ModelAndView newAssignedProject(@PathVariable Long projectId, ModelMap model) throws IOException {
-    User user = authorizationManager.getCurrentUser();
+    User user = securityManager.getUserByLoginName(SecurityContextHolder.getContext().getAuthentication().getName());
     Study study = new StudyImpl(user);
     Project project = projectService.getProjectById(projectId);
     study.setProject(project);
@@ -161,9 +126,9 @@ public class EditStudyController {
     return setupForm(study, user, "New Study", model);
   }
 
-  @GetMapping(value = "/{studyId}")
+  @RequestMapping(value = "/{studyId}", method = RequestMethod.GET)
   public ModelAndView setupForm(@PathVariable Long studyId, ModelMap model) throws IOException {
-    User user = authorizationManager.getCurrentUser();
+    User user = securityManager.getUserByLoginName(SecurityContextHolder.getContext().getAuthentication().getName());
     Study study = studyService.get(studyId);
     if (study == null) throw new NotFoundException("No study found for ID " + studyId.toString());
 
@@ -181,11 +146,11 @@ public class EditStudyController {
     return new ModelAndView("/pages/editStudy.jsp", model);
   }
 
-  @PostMapping
-  public ModelAndView processSubmit(@ModelAttribute("study") Study study, ModelMap model, SessionStatus session) throws IOException {
+  @RequestMapping(method = RequestMethod.POST)
+  public String processSubmit(@ModelAttribute("study") Study study, ModelMap model, SessionStatus session) throws IOException {
     studyService.save(study);
     session.setComplete();
     model.clear();
-    return new ModelAndView("redirect:/miso/study/" + study.getId(), model);
+    return "redirect:/miso/study/" + study.getId();
   }
 }

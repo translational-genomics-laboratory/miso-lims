@@ -38,6 +38,7 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,7 +78,6 @@ import uk.ac.bbsrc.tgac.miso.service.PartitionQCService;
 import uk.ac.bbsrc.tgac.miso.service.PlatformService;
 import uk.ac.bbsrc.tgac.miso.service.RunService;
 import uk.ac.bbsrc.tgac.miso.service.SequencingParametersService;
-import uk.ac.bbsrc.tgac.miso.service.security.AuthorizationManager;
 import uk.ac.bbsrc.tgac.miso.webapp.context.ExternalUriBuilder;
 import uk.ac.bbsrc.tgac.miso.webapp.util.ExperimentListConfiguration;
 import uk.ac.bbsrc.tgac.miso.webapp.util.JsonArrayCollector;
@@ -101,8 +101,6 @@ public class EditRunController {
     return Stream.concat(Stream.of(Run::getMetrics), StreamSupport.stream(METRICS.spliterator(), false));
   }
 
-  @Autowired
-  private AuthorizationManager authorizationManager;
   @Autowired
   private SecurityManager securityManager;
   @Autowired
@@ -128,6 +126,10 @@ public class EditRunController {
 
   @Autowired
   private ExternalUriBuilder externalUriBuilder;
+
+  public void setSecurityManager(SecurityManager securityManager) {
+    this.securityManager = securityManager;
+  }
 
   public void setRunService(RunService runService) {
     this.runService = runService;
@@ -168,7 +170,7 @@ public class EditRunController {
 
   @GetMapping("/new/{srId}")
   public ModelAndView newUnassignedRun(@PathVariable Long srId, ModelMap model) throws IOException {
-    User user = authorizationManager.getCurrentUser();
+    User user = securityManager.getUserByLoginName(SecurityContextHolder.getContext().getAuthentication().getName());
     // clear any existing run in the model
     model.addAttribute("run", null);
     Instrument instrument = instrumentService.get(srId);
@@ -206,7 +208,7 @@ public class EditRunController {
   public ModelAndView setupForm(Run run, ModelMap model) throws IOException {
 
     try {
-      User user = authorizationManager.getCurrentUser();
+      User user = securityManager.getUserByLoginName(SecurityContextHolder.getContext().getAuthentication().getName());
 
       if (run.getId() == Run.UNSAVED_ID) {
         model.put("title", "New Run");
@@ -288,10 +290,10 @@ public class EditRunController {
     }
   }
 
-  @PostMapping
-  public ModelAndView processSubmit(@ModelAttribute("run") Run run, ModelMap model, SessionStatus session) throws IOException {
+  @PostMapping()
+  public String processSubmit(@ModelAttribute("run") Run run, ModelMap model, SessionStatus session) throws IOException {
     try {
-      User user = authorizationManager.getCurrentUser();
+      User user = securityManager.getUserByLoginName(SecurityContextHolder.getContext().getAuthentication().getName());
       for (SequencerPartitionContainer container : run.getSequencerPartitionContainers()) {
         for (Partition partition : container.getPartitions()) {
           if (partition.getPool() != null) {
@@ -309,7 +311,7 @@ public class EditRunController {
 
       session.setComplete();
       model.clear();
-      return new ModelAndView("redirect:/miso/run/" + runId, model);
+      return "redirect:/miso/run/" + runId;
     } catch (IOException ex) {
       if (log.isDebugEnabled()) {
         log.debug("Failed to save run", ex);

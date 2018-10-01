@@ -8,11 +8,12 @@ import java.util.function.Predicate;
 import com.eaglegenomics.simlims.core.Note;
 import com.eaglegenomics.simlims.core.User;
 
-import uk.ac.bbsrc.tgac.miso.core.data.GetLaneContents;
 import uk.ac.bbsrc.tgac.miso.core.data.Run;
 import uk.ac.bbsrc.tgac.miso.core.data.SequencingParameters;
 import uk.ac.bbsrc.tgac.miso.core.exception.MisoNamingException;
 import uk.ac.bbsrc.tgac.miso.core.util.PaginatedDataSource;
+
+import ca.on.gsi.oicr.runscanner.GetLaneContents;
 
 public interface RunService extends PaginatedDataSource<Run> {
 

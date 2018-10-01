@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,7 +87,6 @@ import uk.ac.bbsrc.tgac.miso.service.PoolOrderService;
 import uk.ac.bbsrc.tgac.miso.service.PoolService;
 import uk.ac.bbsrc.tgac.miso.service.RunService;
 import uk.ac.bbsrc.tgac.miso.service.SequencingParametersService;
-import uk.ac.bbsrc.tgac.miso.service.security.AuthorizationManager;
 import uk.ac.bbsrc.tgac.miso.webapp.util.BulkEditTableBackend;
 import uk.ac.bbsrc.tgac.miso.webapp.util.BulkTableBackend;
 
@@ -108,9 +108,8 @@ public class EditPoolController {
   private SequencingParametersService sequencingParametersService;
 
   @Autowired
-  private AuthorizationManager authorizationManager;
-  @Autowired
   private SecurityManager securityManager;
+
   @Autowired
   private ChangeLogService changeLogService;
   @Autowired
@@ -125,6 +124,10 @@ public class EditPoolController {
   private ContainerService containerService;
   @Autowired
   private BoxService boxService;
+
+  public void setSecurityManager(SecurityManager securityManager) {
+    this.securityManager = securityManager;
+  }
 
   public void setRunService(RunService runService) {
     this.runService = runService;
@@ -169,7 +172,7 @@ public class EditPoolController {
   @GetMapping(value = "/{poolId}")
   public ModelAndView setupForm(@PathVariable Long poolId, ModelMap model) throws IOException {
     try {
-      User user = authorizationManager.getCurrentUser();
+      User user = securityManager.getUserByLoginName(SecurityContextHolder.getContext().getAuthentication().getName());
       Pool pool = null;
       if (poolId == PoolImpl.UNSAVED_ID) {
         pool = new PoolImpl(user);
@@ -229,7 +232,7 @@ public class EditPoolController {
   }
 
   @PostMapping
-  public ModelAndView processSubmit(@ModelAttribute("pool") Pool pool, ModelMap model, SessionStatus session)
+  public String processSubmit(@ModelAttribute("pool") Pool pool, ModelMap model, SessionStatus session)
       throws IOException {
     try {
       // The pooled elements may have been modified asynchronously while the form was being edited. Since they can't be edited by form,
@@ -242,7 +245,7 @@ public class EditPoolController {
       poolService.save(pool);
       session.setComplete();
       model.clear();
-      return new ModelAndView("redirect:/miso/pool/" + pool.getId(), model);
+      return "redirect:/miso/pool/" + pool.getId();
     } catch (IOException ex) {
       log.debug("Failed to save pool", ex);
       throw ex;

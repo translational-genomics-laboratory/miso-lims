@@ -36,11 +36,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -70,7 +69,7 @@ public class EditSubmissionController {
     return submissionService.getColumnSizes();
   }
 
-  @GetMapping(value = "/new")
+  @RequestMapping(value = "/new", method = RequestMethod.GET)
   public ModelAndView newSubmission(@QueryParam("experimentIds") String experimentIds, ModelMap model) throws IOException {
     Submission submission = new Submission();
     submission.setExperiments(COMMA.splitAsStream(experimentIds).map(Long::parseLong).map(WhineyFunction.rethrow(experimentService::get))
@@ -79,14 +78,14 @@ public class EditSubmissionController {
     return setupForm(submission, "New Submission", model);
   }
 
-  @PostMapping
-  public ModelAndView processSubmit(@ModelAttribute("submission") Submission submission, ModelMap model, SessionStatus session)
+  @RequestMapping(method = RequestMethod.POST)
+  public String processSubmit(@ModelAttribute("submission") Submission submission, ModelMap model, SessionStatus session)
       throws IOException {
     try {
       submissionService.save(submission);
       session.setComplete();
       model.clear();
-      return new ModelAndView("redirect:/miso/submission/" + submission.getId(), model);
+      return "redirect:/miso/submission/" + submission.getId();
     } catch (IOException ex) {
       if (log.isDebugEnabled()) {
         log.debug("Failed to save submission", ex);
@@ -95,7 +94,7 @@ public class EditSubmissionController {
     }
   }
 
-  @GetMapping(value = "/{submissionId}")
+  @RequestMapping(value = "/{submissionId}", method = RequestMethod.GET)
   public ModelAndView setupForm(@PathVariable Long submissionId, ModelMap model) throws IOException {
     Submission submission = submissionService.get(submissionId);
     return setupForm(submission, "Submission " + submissionId, model);

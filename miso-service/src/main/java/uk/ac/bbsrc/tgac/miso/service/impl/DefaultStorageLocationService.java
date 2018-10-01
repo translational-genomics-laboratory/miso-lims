@@ -166,11 +166,9 @@ public class DefaultStorageLocationService implements StorageLocationService {
     loadChildEntities(storage);
     storage.setChangeDetails(authorizationManager.getCurrentUser());
     long savedId = storageLocationStore.save(storage);
-    StorageLocation[] childLocations = storage.getChildLocations().toArray(new StorageLocation[storage.getChildLocations().size()]);
-    for (StorageLocation child : childLocations) {
+    for (StorageLocation child : storage.getChildLocations()) {
       addFreezerStorage(child);
     }
-
     return savedId;
   }
 

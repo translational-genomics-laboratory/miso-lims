@@ -97,7 +97,6 @@ public class DefaultStudyService implements StudyService, AuthorizedPaginatedDat
       study.setStudyType(studyStore.getType(study.getStudyType().getId()));
       study.setProject(projectStore.get(study.getProject().getId()));
       study.setName(LimsUtils.generateTemporaryName());
-      study.setSecurityProfile(study.getProject().getSecurityProfile());
       long id = studyStore.save(study);
       try {
         study.setName(namingScheme.generateNameFor(study));
@@ -114,7 +113,6 @@ public class DefaultStudyService implements StudyService, AuthorizedPaginatedDat
       original.setAlias(study.getAlias());
       original.setDescription(study.getDescription());
       original.setChangeDetails(authorizationManager.getCurrentUser());
-
       // project is immutable
       original.setStudyType(studyStore.getType(study.getStudyType().getId()));
       return studyStore.save(original);

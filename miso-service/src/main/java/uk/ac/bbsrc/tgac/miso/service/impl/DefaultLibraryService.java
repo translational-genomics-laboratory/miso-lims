@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.eaglegenomics.simlims.core.Note;
 import com.eaglegenomics.simlims.core.SecurityProfile;
+import com.eaglegenomics.simlims.core.User;
 import com.eaglegenomics.simlims.core.manager.SecurityManager;
 
 import uk.ac.bbsrc.tgac.miso.core.data.AbstractLibrary;
@@ -161,7 +162,7 @@ public class DefaultLibraryService implements LibraryService, AuthorizedPaginate
     }
     loadChildEntities(library);
     boxService.throwIfBoxPositionIsFilled(library);
-    library.setChangeDetails(authorizationManager.getCurrentUser());
+    setChangeDetails(library);
     if (library.getSecurityProfile() == null) {
       library.inheritPermissions(sampleService.get(library.getSample().getId()));
     }
@@ -194,7 +195,7 @@ public class DefaultLibraryService implements LibraryService, AuthorizedPaginate
     boolean validateAliasUniqueness = !managed.getAlias().equals(library.getAlias());
     validateChange(library, managed);
     applyChanges(managed, library);
-    managed.setChangeDetails(authorizationManager.getCurrentUser());
+    setChangeDetails(managed);
     loadChildEntities(managed);
     makeChangeLogForIndices(originalIndices, managed.getIndices(), managed);
     save(managed, validateAliasUniqueness);
@@ -481,6 +482,30 @@ public class DefaultLibraryService implements LibraryService, AuthorizedPaginate
               "Cannot use design " + design.getName() + " for a library from a sample of type " + sampleClass.getAlias());
         }
       }
+    }
+  }
+
+  /**
+   * Updates all timestamps and user data associated with the change
+   * 
+   * @param library the Library to update
+   * @throws IOException
+   */
+  private void setChangeDetails(Library library) throws IOException {
+    User user = authorizationManager.getCurrentUser();
+    Date now = new Date();
+    library.setLastModifier(user);
+
+    if (library.getId() == Library.UNSAVED_ID) {
+      library.setCreator(user);
+      if (library.getCreationTime() == null) {
+        library.setCreationTime(now);
+        library.setLastModified(now);
+      } else if (library.getLastModified() == null) {
+        library.setLastModified(now);
+      }
+    } else {
+      library.setLastModified(now);
     }
   }
 

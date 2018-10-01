@@ -27,7 +27,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>uk.ac.bbsrc.tgac.miso</groupId>
   <artifactId>miso</artifactId>
-  <version>0.2.144-oicr-SNAPSHOT</version>
+  <version>0.2.142-oicr-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>MISO LIMS</name>
   <url>http://tgac.github.io/miso-lims/</url>
@@ -122,7 +122,6 @@
     <module>miso-service</module>
     <module>sqlstore</module>
     <module>miso-dto</module>
-    <module>runscanner</module>
     <module>miso-external-web</module>
     <module>pinery-miso</module>
   </modules>
@@ -131,7 +130,7 @@
     <connection>scm:git:https://www.github.com/oicr-gsi/miso-lims</connection>
     <developerConnection>scm:git:git@github.com:oicr-gsi/miso-lims</developerConnection>
     <url>http://www.github.com/oicr-gsi/miso-lims</url>
-    <tag>v0.2.143</tag>
+    <tag>v0.2.140</tag>
   </scm>
   <!-- Bug Tracker -->
   <issueManagement>
@@ -181,6 +180,10 @@
         <groupId>aopalliance</groupId>
         <artifactId>aopalliance</artifactId>
         <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ca.on.gsi.oicr</groupId>
+        <artifactId>runscanner</artifactId>
       </dependency>
       <dependency>
         <groupId>ca.on.oicr.gsi</groupId>
