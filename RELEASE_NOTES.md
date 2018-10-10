@@ -1,3 +1,39 @@
+# 0.2.146
+
+Changes:
+
+ * Update stored procedures to be compatible with desired MySQL version
+
+# 0.2.145
+
+Changes:
+
+ * Attachments: 
+    * Add ability to categorize attachments
+    * Add ability to (bulk) attach files to samples and libraries
+    * Add ability to link project attachmetns to samples and libraries
+ * Update transfer list fields in downloadable sheet
+ * Default propagated sample creation date to today (DetailedSample mode)
+ * Improve error message for duplicate barcode on storage locations
+ * Add type data section of user manual
+ * Bug fixes:
+    * Sample sheets now display correct index 2 sequences
+    * Ghost slides no longer save incorrectly (DetailedSample mode)
+
+# 0.2.144
+
+Changes:
+
+ * added Subprojects to Project page
+ * display number of items in workset on List Worksets page
+ * allow merging worksets
+ * fixed bug where menu links to admin-only pages were visible to non-admin users
+ * fixed bug where the transfer list was showing the Identity's subproject instead of the sample's subproject
+ * fixed bug where volume required units even when zero
+ * fixed bug where reloaded library templates have incorrect platform
+ * fixed bug where second index of unique dual index families was not automatically selected
+ * added feature list and first few chapters of new user manual
+
 # 0.2.143
 
 Changes:
