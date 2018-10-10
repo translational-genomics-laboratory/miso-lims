@@ -63,6 +63,29 @@ public enum HealthType {
   }
 
   /**
+   * Converts between RunScanner's HealthType and Miso's HealthType
+   * 
+   * @param rsht RunScanner HealthType
+   * @return equivalent miso HealthType
+   */
+  public static HealthType fromRunscanner(ca.on.oicr.gsi.runscanner.rs.dto.type.HealthType rsht) {
+    switch (rsht) {
+    case COMPLETED:
+      return Completed;
+    case FAILED:
+      return Failed;
+    case RUNNING:
+      return Running;
+    case STOPPED:
+      return Stopped;
+    case UNKNOWN:
+      return Unknown;
+    }
+
+    return null;
+  }
+
+  /**
    * Returns a HealthType given an enum key
    * 
    * @param key

@@ -34,6 +34,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.Lists;
 
 import uk.ac.bbsrc.tgac.miso.core.data.Barcodable;
+import uk.ac.bbsrc.tgac.miso.core.data.GetLaneContents;
 import uk.ac.bbsrc.tgac.miso.core.data.IlluminaRun;
 import uk.ac.bbsrc.tgac.miso.core.data.Instrument;
 import uk.ac.bbsrc.tgac.miso.core.data.LS454Run;
@@ -65,8 +66,6 @@ import uk.ac.bbsrc.tgac.miso.service.SequencingParametersService;
 import uk.ac.bbsrc.tgac.miso.service.security.AuthorizationException;
 import uk.ac.bbsrc.tgac.miso.service.security.AuthorizationManager;
 import uk.ac.bbsrc.tgac.miso.service.security.AuthorizedPaginatedDataSource;
-
-import ca.on.gsi.oicr.runscanner.GetLaneContents;
 
 @Transactional(rollbackFor = Exception.class)
 @Service
@@ -669,7 +668,8 @@ public class DefaultRunService implements RunService, AuthorizedPaginatedDataSou
     return isMutated;
   }
 
-  private boolean updateSequencingParameters(final Run target, User user, Predicate<SequencingParameters> filterParameters,
+  private boolean updateSequencingParameters(final Run target, User user, 
+      Predicate<SequencingParameters> filterParameters,
       final Instrument sequencer) throws IOException {
     // If the sequencing parameters haven't been updated by a human, see if we can find exactly one that matches.
     if (!target.didSomeoneElseChangeColumn("parameters", user)) {
