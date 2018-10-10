@@ -39,7 +39,7 @@
   </properties>
   <dependencies>
   <dependency>
-        <groupId>ca.on.gsi.oicr.runscanner</groupId>
+        <groupId>ca.on.oicr.gsi.runscanner</groupId>
         <artifactId>rs-dto</artifactId>
       </dependency>
     <dependency>
@@ -80,7 +80,7 @@
       <artifactId>jackson-datatype-jsr310</artifactId>
     </dependency>
     <dependency>
-      <groupId>ca.on.gsi.oicr.runscanner</groupId>
+      <groupId>ca.on.oicr.gsi.runscanner</groupId>
       <artifactId>runscanner</artifactId>
       <version>0.0.1-SNAPSHOT</version>
       <type>war</type>
