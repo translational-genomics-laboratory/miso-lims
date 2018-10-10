@@ -127,10 +127,23 @@
   </modules>
   <!-- SVN connection -->
   <scm>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    <connection>scm:git:https://www.github.com/oicr-gsi/miso-lims</connection>
+    <developerConnection>scm:git:git@github.com:oicr-gsi/miso-lims</developerConnection>
+    <url>http://www.github.com/oicr-gsi/miso-lims</url>
+    <tag>v0.2.140</tag>
+=======
+>>>>>>> 9e140c4b9071743178100d1322c2aa8cc0f71dc7
     <connection>scm:git:https://www.github.com/TGAC/miso-lims</connection>
     <developerConnection>scm:git:git@github.com:TGAC/miso-lims</developerConnection>
     <url>http://www.github.com/TGAC/miso-lims</url>
     <tag>v0.2.46</tag>
+<<<<<<< HEAD
+=======
+>>>>>>> 6928303866e724b70e11a86d81f2d440c924218d
+>>>>>>> 9e140c4b9071743178100d1322c2aa8cc0f71dc7
   </scm>
   <!-- Bug Tracker -->
   <issueManagement>
