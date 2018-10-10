@@ -87,7 +87,7 @@ HotTarget.library = (function() {
             var indexName = (Utils.array.maybeGetProperty(indexFamily, 'indices') || []).filter(function(index) {
               return index.position == n - 1;
             }).find(function(index) {
-              return index.label == value
+              return index.label == value || index.sequence == value;
             }).name;
             if (indexName) {
               var dualIndex = (Utils.array.maybeGetProperty(indexFamily, 'indices') || []).filter(function(index) {
@@ -819,8 +819,11 @@ HotTarget.library = (function() {
           HotUtils.makeParents('library', HotUtils.relationCategoriesForDetailed()),
           HotUtils.makeChildren('library', [HotUtils.relations.dilution(), HotUtils.relations.pool()])].concat(
           HotUtils.makeQcActions("Library")).concat(
-          config.worksetId ? [HotUtils.makeRemoveFromWorkset('libraries', config.worksetId)] : [HotUtils.makeAddToWorkset('libraries',
-              'libraryIds')]);
+          [
+              config.worksetId ? HotUtils.makeRemoveFromWorkset('libraries', config.worksetId) : HotUtils.makeAddToWorkset('libraries',
+                  'libraryIds'), HotUtils.makeAttachFile('library', function(library) {
+                return library.parentSampleProjectId;
+              })]);
     }
   };
 })();

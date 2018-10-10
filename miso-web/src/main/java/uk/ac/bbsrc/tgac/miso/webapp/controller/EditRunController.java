@@ -1,35 +1,3 @@
-/*
- * Copyright (c) 2012. The Genome Analysis Centre, Norwich, UK
- * MISO project contacts: Robert Davey @ TGAC
- * *********************************************************************
- *
- * This file is part of MISO.
- *
- * MISO is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MISO is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MISO. If not, see <http://www.gnu.org/licenses/>.
- *
- * *********************************************************************
- */
-
-package uk.ac.bbsrc.tgac.miso.webapp.controller;
-
-import static uk.ac.bbsrc.tgac.miso.core.util.LimsUtils.isStringBlankOrNull;
-
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -193,7 +162,7 @@ public class EditRunController {
   @GetMapping("/{runId}")
   public ModelAndView setupForm(@PathVariable Long runId, ModelMap model) throws IOException {
     Run run = runService.get(runId);
-
+    if (run == null) throw new NotFoundException("No run found with ID " + runId);
     return setupForm(run, model);
 
   }
@@ -201,8 +170,8 @@ public class EditRunController {
   @GetMapping("/alias/{runAlias}")
   public ModelAndView setupForm(@PathVariable String runAlias, ModelMap model) throws IOException {
     Run run = runService.getRunByAlias(runAlias);
+    if (run == null) throw new NotFoundException("No run found with alias " + runAlias);
     return setupForm(run, model);
-
   }
 
   public ModelAndView setupForm(Run run, ModelMap model) throws IOException {

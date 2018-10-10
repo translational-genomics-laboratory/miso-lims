@@ -87,7 +87,7 @@ public class EditStudyController {
 
   public Project populateProject(@PathVariable Long projectId) throws IOException {
     try {
-      return projectService.getProjectById(projectId);
+      return projectService.get(projectId);
     } catch (IOException ex) {
       if (log.isDebugEnabled()) {
         log.debug("Failed to get parent project", ex);
@@ -110,7 +110,7 @@ public class EditStudyController {
   public ModelAndView newAssignedProject(@PathVariable Long projectId, ModelMap model) throws IOException {
     User user = securityManager.getUserByLoginName(SecurityContextHolder.getContext().getAuthentication().getName());
     Study study = new StudyImpl(user);
-    Project project = projectService.getProjectById(projectId);
+    Project project = projectService.get(projectId);
     study.setProject(project);
 
     if (Arrays.asList(user.getRoles()).contains("ROLE_TECH")) {
