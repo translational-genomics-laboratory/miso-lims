@@ -182,10 +182,9 @@
         <version>1.0</version>
       </dependency>
       <dependency>
-        <groupId>ca.on.gsi.oicr.runscanner</groupId>
+        <groupId>ca.on.oicr.gsi.runscanner</groupId>
         <artifactId>runscanner</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <type>war</type>
       </dependency>
       <dependency>
         <groupId>ca.on.oicr.gsi</groupId>
@@ -662,12 +661,12 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>ca.on.gsi.oicr.runscanner</groupId>
+        <groupId>ca.on.oicr.gsi.runscanner</groupId>
         <artifactId>scanner</artifactId>
         <version>0.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>ca.on.gsi.oicr.runscanner</groupId>
+        <groupId>ca.on.oicr.gsi.runscanner</groupId>
         <artifactId>rs-dto</artifactId>
         <version>0.0.1-SNAPSHOT</version>
       </dependency>
