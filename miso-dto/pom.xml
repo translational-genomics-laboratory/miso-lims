@@ -79,11 +79,5 @@
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
     </dependency>
-    <dependency>
-      <groupId>ca.on.oicr.gsi.runscanner</groupId>
-      <artifactId>runscanner</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-      <type>war</type>
-    </dependency>
   </dependencies>
 </project>
