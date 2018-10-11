@@ -52,6 +52,8 @@ order: 1
 {% assign sub = sub | plus: 1 %}
 {% include userman-toc-link.md section=section sub=sub section-title=section-title title="Single Item Create/Edit Pages" %}
 {% assign subsub = 1 %}
+{% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Collapsible Sections" %}
+{% assign subsub = subsub | plus: 1 %}
 {% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Change Logs" %}
 {% assign subsub = subsub | plus: 1 %}
 {% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Notes" %}
@@ -186,9 +188,13 @@ order: 1
 {% assign subsub = subsub | plus: 1 %}
 {% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Permissions" %}
 {% assign sub = sub | plus: 1 %}
-{% include userman-toc-link.md section=section sub=sub section-title=section-title title="Tracked Issues" %}
-{% assign sub = sub | plus: 1 %}
-{% include userman-toc-link.md section=section sub=sub section-title=section-title title="Project Files" %}
+{% include userman-toc-link.md section=section sub=sub section-title=section-title title="Edit Project Page" %}
+{% assign subsub =  1 %}
+{% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Project Overviews" %}
+{% assign subsub = subsub | plus: 1 %}
+{% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Tracked Issues" %}
+{% assign subsub = subsub | plus: 1 %}
+{% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Project Files" %}
 {% assign sub = sub | plus: 1 %}
 {% include userman-toc-link.md section=section sub=sub section-title=section-title title="Subprojects" %}
 {% assign subsub = 1 %}
@@ -197,17 +203,6 @@ order: 1
 {% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Editing Subprojects" %}
 {% assign subsub = subsub | plus: 1 %}
 {% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Deleting Subprojects" %}
-
-
-{% assign section = section | plus: 1 %}
-{% assign section-title = "Studies" %}
-{% include userman-toc-link.md section=section section-title=section-title %}
-{% assign sub = 1 %}
-{% include userman-toc-link.md section=section sub=sub section-title=section-title title="Studies List" %}
-{% assign sub = sub | plus: 1 %}
-{% include userman-toc-link.md section=section sub=sub section-title=section-title title="Adding Studies" %}
-{% assign sub = sub | plus: 1 %}
-{% include userman-toc-link.md section=section sub=sub section-title=section-title title="Deleting Studies" %}
 
 
 {% assign section = section | plus: 1 %}
@@ -629,6 +624,16 @@ order: 1
 {% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Editing an Experiment" %}
 {% assign subsub = subsub | plus: 1 %}
 {% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Adding Consumables to an Experiment" %}
+
+{% assign sub = 1 %}
+{% include userman-toc-link.md section=section sub=sub section-title=section-title title="Studies" %}
+{% assign subsub = 1 %}
+{% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Studies List" %}
+{% assign subsub = subsub | plus: 1 %}
+{% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Adding Studies" %}
+{% assign subsub = subsub | plus: 1 %}
+{% include userman-toc-link.md section=section sub=sub subsub=subsub section-title=section-title title="Deleting Studies" %}
+
 {% assign sub = 1 %}
 {% include userman-toc-link.md section=section sub=sub section-title=section-title title="Submissions" %}
 {% assign subsub = 1 %}
