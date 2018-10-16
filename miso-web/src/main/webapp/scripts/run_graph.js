@@ -178,7 +178,8 @@ var RunGraph = (function() {
                   animation: false,
                   tooltip: {
                     valueDecimals: 2
-                  }
+                  },
+                  pointStart: xStart
                 }
               },
               series: metric.series

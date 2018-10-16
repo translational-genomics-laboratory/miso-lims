@@ -271,6 +271,10 @@ public class EditSampleController {
   private Boolean detailedSample;
   @Value("${miso.defaults.sample.bulk.scientificname:}")
   private String defaultSciName;
+  @Value("${miso.defaults.sample.lcmtube.groupid:}")
+  private String defaultLcmTubeGroupId;
+  @Value("${miso.defaults.sample.lcmtube.groupdescription:}")
+  private String defaultLcmTubeGroupDesc;
 
   private Boolean isDetailedSampleEnabled() {
     return detailedSample;
@@ -288,6 +292,8 @@ public class EditSampleController {
     private static final String HAS_PROJECT = "hasProject";
     private static final String DNASE_TREATABLE = "dnaseTreatable";
     private static final String DEFAULT_SCI_NAME = "defaultSciName";
+    private static final String DEFAULT_LCM_TUBE_GROUP_ID = "defaultLcmTubeGroupId";
+    private static final String DEFAULT_LCM_TUBE_GROUP_DESC = "defaultLcmTubeGroupDescription";
     private static final String SOURCE_SAMPLE_CLASS = "sourceSampleClass";
     private static final String TARGET_SAMPLE_CLASS = "targetSampleClass";
     private static final String BOX = "box";
@@ -948,7 +954,7 @@ public class EditSampleController {
       config.put(Config.PROPAGATE, false);
       config.put(Config.EDIT, true);
     }
-  };
+  }
 
   private final class BulkPropagateSampleBackend extends BulkPropagateTableBackend<Sample, SampleDto> {
     private SampleClass sourceSampleClass;
@@ -1000,8 +1006,10 @@ public class EditSampleController {
       config.putPOJO(Config.TARGET_SAMPLE_CLASS, Dtos.asDto(targetSampleClass));
       config.putPOJO(Config.SOURCE_SAMPLE_CLASS, Dtos.asDto(sourceSampleClass));
       config.putPOJO(Config.BOX, newBox);
+      config.put(Config.DEFAULT_LCM_TUBE_GROUP_ID, defaultLcmTubeGroupId);
+      config.put(Config.DEFAULT_LCM_TUBE_GROUP_DESC, defaultLcmTubeGroupDesc);
     }
-  };
+  }
 
   private final class BulkCreateSampleBackend extends BulkCreateTableBackend<SampleDto> {
     private final SampleClass targetSampleClass;
@@ -1026,6 +1034,8 @@ public class EditSampleController {
       }
       config.put(Config.CREATE, true);
       config.put(Config.HAS_PROJECT, project != null);
+      config.put(Config.DEFAULT_LCM_TUBE_GROUP_ID, defaultLcmTubeGroupId);
+      config.put(Config.DEFAULT_LCM_TUBE_GROUP_DESC, defaultLcmTubeGroupDesc);
       if (project == null) {
         projectService.listAllProjects().stream().map(Dtos::asDto).forEach(config.putArray("projects")::addPOJO);
         config.put(Config.DEFAULT_SCI_NAME, defaultSciName);
@@ -1039,6 +1049,6 @@ public class EditSampleController {
       }
       config.putPOJO(Config.BOX, box);
     }
-  };
+  }
 
 }
