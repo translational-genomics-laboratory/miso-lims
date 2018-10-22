@@ -131,7 +131,14 @@ var RunGraph = (function() {
       };
     });
   };
+
+  // Line graph starting at 0 on x axis
   var lineGraph = function(typeName, title, yLabel) {
+    return lineGraph_CustomX(typeName, title, yLabel, 0)
+  }
+
+  // Line graph with a custom starting point on the x axis
+  var lineGraph_CustomX = function(typeName, title, yLabel, xStart) {
     return function(metrics, width, renamePartitions) {
       return metrics.filter(function(metric) {
         return metric.type == typeName;
@@ -330,8 +337,7 @@ var RunGraph = (function() {
         lineGraph('illumina-called-intensity-by-cycle', 'Called Intensity', 'Average Intensity per Cycle'),
         lineGraph('illumina-base-percent-by-cycle', 'Base %', 'Percentage'),
         illuminaPerLanePlot('illumina-cluster-density-by-lane', 'Cluster Density', 'Density (K/mm²)'),
-        lineGraph('illumina-clusters-by-lane', 'Lane', 'Clusters'),
-        barGraph('illumina-yield-by-read', 'Yields', 'Yield (gb)')],
+        lineGraph_CustomX('illumina-clusters-by-lane', 'Lane', 'Clusters', 1), barGraph('illumina-yield-by-read', 'Yields', 'Yield (gb)')],
     // Takes a list of metrics and renders them to #metricsdiv
     renderMetrics: function(metrics, partitionNames) {
       var container = document.getElementById('metricsdiv');
