@@ -16,13 +16,13 @@ import uk.ac.bbsrc.tgac.miso.core.data.Pool;
 import uk.ac.bbsrc.tgac.miso.core.data.impl.PoolImpl;
 import uk.ac.bbsrc.tgac.miso.core.data.type.PlatformType;
 import uk.ac.bbsrc.tgac.miso.core.util.LimsUtils;
+import uk.ac.bbsrc.tgac.miso.webapp.integrationtest.page.AbstractListPage.Columns;
 import uk.ac.bbsrc.tgac.miso.webapp.integrationtest.page.PoolPage;
 import uk.ac.bbsrc.tgac.miso.webapp.integrationtest.page.PoolPage.Field;
 import uk.ac.bbsrc.tgac.miso.webapp.integrationtest.page.PoolPage.PoolTableWrapperId;
 import uk.ac.bbsrc.tgac.miso.webapp.integrationtest.page.dialog.AddNoteDialog;
 import uk.ac.bbsrc.tgac.miso.webapp.integrationtest.page.element.DataTable;
 import uk.ac.bbsrc.tgac.miso.webapp.integrationtest.page.element.Note;
-import uk.ac.bbsrc.tgac.miso.webapp.integrationtest.page.AbstractListPage.Columns;
 
 
 public class PoolPageIT extends AbstractIT {
@@ -231,6 +231,8 @@ public class PoolPageIT extends AbstractIT {
     assertEquals("test note", dialog.getField(AddNoteDialog.Field.TEXT));
     PoolPage page2 = dialog.submit();
 
+    assertNotNull(page2);
+    assertNotNull(page2.getNotesSection());
     List<Note> afterAddNotes = page2.getNotesSection().getNotes();
     assertEquals(initialNotes.size() + 1, afterAddNotes.size());
     assertTrue(afterAddNotes.stream().anyMatch(expectedText));
